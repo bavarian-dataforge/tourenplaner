@@ -7,13 +7,13 @@ Keine echten Orte, keine echten Kunden.
 
 | Datei | Aufgabe |
 | --- | --- |
-| `modell.py` | Datenmodell. Uhrzeiten als Minuten seit Mitternacht. Ausgabe: je Stopp **Ankunft, Beginn, Abfahrt** |
+| `modell.py` | Datenmodell. Uhrzeiten als Minuten seit Mitternacht. Ausgabe: je Stopp **Ankunft, Beginn, Abfahrt**; Stopps mit `ort` und festem `hinweis` |
 | `fahrzeiten.py` | Fahrzeitmatrix: Luftlinie × 1,3 bei 50 km/h. Später durch OSRM ersetzbar, gleiche Schnittstelle |
 | `testdaten.py` | Erzeugt die erfundene Bäckerei, reproduzierbar über den Seed |
 | `solver.py` | OR-Tools: wer fährt welche Stopps in welcher Reihenfolge; danach Uhrzeiten vorwärts rechnen |
 | `pruefer.py` | Unabhängiger Prüfer: rechnet jeden Plan nach, vertraut dem Solver nicht |
 | `main.py` | Kommandozeile: planen, ausgeben, prüfen, optional als JSON speichern |
-| `tests/test_planung.py` | 18 Tests: gültige Pläne für 7 Seeds, Prüfer erkennt 6 absichtlich eingebaute Fehler |
+| `tests/test_planung.py` | 21 Tests: gültige Pläne für 7 Seeds, Prüfer erkennt 6 absichtlich eingebaute Fehler, JSON-Export mit Stammdaten |
 
 ## Einrichten und starten
 

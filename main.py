@@ -50,8 +50,10 @@ def main() -> int:
                 s = problem.stopp(ps.stopp_id)
                 warten = f"  (wartet {ps.beginn - ps.ankunft} min)" if ps.beginn > ps.ankunft else ""
                 print(f"    {uhrzeit(ps.ankunft)} an · {uhrzeit(ps.beginn)}–{uhrzeit(ps.abfahrt)}"
-                      f"  {s.name:<11} {s.kisten:>3} Kisten · Fenster "
+                      f"  {s.name + ' · ' + s.ort:<28} {s.kisten:>3} Kisten · Fenster "
                       f"{uhrzeit(s.fenster_von)}–{uhrzeit(s.fenster_bis)}{warten}")
+                if s.hinweis:
+                    print(f"{'':>26}Hinweis: {s.hinweis}")
         print()
 
     k = plan.kennzahlen()
@@ -67,7 +69,15 @@ def main() -> int:
 
     if args.json:
         with open(args.json, "w", encoding="utf-8") as fh:
-            json.dump({"kennzahlen": k, **asdict(plan)}, fh, ensure_ascii=False, indent=2)
+            # Plan + Stammdaten: Die Fahrer-Ansicht braucht Name, Ort, Kisten, Fenster
+            # und Hinweis je Stopp, nicht nur die IDs aus dem Plan.
+            json.dump({
+                "betrieb": asdict(problem.betrieb),
+                "fahrer": [asdict(f) for f in problem.fahrer],
+                "stopps": [asdict(s) for s in problem.stopps],
+                "kennzahlen": k,
+                **asdict(plan),
+            }, fh, ensure_ascii=False, indent=2)
         print(f"Plan gespeichert: {args.json}")
     return 1 if fehler else 0
 

@@ -106,6 +106,31 @@ def test_pruefer_findet_falsch_gerechnete_ankunft(standard):
     assert any("nachgerechnet" in f for f in pruefen(problem, plan))
 
 
+def test_jeder_stopp_hat_einen_ort_und_manche_einen_hinweis():
+    problem = baeckerei_nordoberpfalz(seed=7)
+    assert all(s.ort for s in problem.stopps)
+    assert len({s.ort for s in problem.stopps}) == len(problem.stopps)   # keine doppelten Orte
+    assert any(s.hinweis for s in problem.stopps)
+
+
+def test_mehr_stopps_als_ortsnamen():
+    problem = baeckerei_nordoberpfalz(seed=7, filialen=30)
+    assert all(s.ort for s in problem.stopps)
+
+
+def test_json_export_enthaelt_stammdaten(tmp_path, monkeypatch):
+    import json
+    import main
+    datei = tmp_path / "plan.json"
+    monkeypatch.setattr(sys, "argv", ["main.py", "--zeitlimit", "0.5", "--json", str(datei)])
+    main.main()
+    daten = json.loads(datei.read_text(encoding="utf-8"))
+    assert {"betrieb", "fahrer", "stopps", "touren", "offen", "kennzahlen"} <= daten.keys()
+    erster = daten["touren"][0]["stopps"][0]
+    assert {"ankunft", "beginn", "abfahrt"} <= erster.keys()
+    assert all("ort" in s and "hinweis" in s for s in daten["stopps"])
+
+
 def test_fahrzeiten_symmetrisch_und_null_auf_diagonale():
     fz = Fahrzeiten(baeckerei_nordoberpfalz(seed=7))
     for i in range(5):

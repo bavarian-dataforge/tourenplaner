@@ -43,6 +43,9 @@ class Stopp:
     servicezeit: int    # Minuten für Entladen
     fertig_ab: int      # Ware ist ab dann ladebereit ("erst backen, dann fahren")
     art: str = "Filiale"
+    ort: str = ""       # Ortsname für die Fahrer-Ansicht ("Kiosk 04 · Obertshausen")
+    hinweis: str = ""   # fester Hinweis aus den Stammdaten, z. B. Zugang oder Klingel.
+                        # Tageshinweise der Leitstelle kommen später getrennt dazu.
 
 
 @dataclass(frozen=True)
